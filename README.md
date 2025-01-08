@@ -1,8 +1,64 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# SpendWise
+SpendWise is React application used to check your daily
+transaction details about your income and expenses in daily bases.
+# Description
+Financial tracking management involves monitoring and organizing your personal or business finances by recording income and expenses. The goal is to maintain control over your finances and gain insights into your financial health. By tracking your income (e.g., salary, earnings) and expenses (e.g., bills, groceries, entertainment), you can make informed decisions, identify areas for saving, and avoid overspending
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+
+## Table of content
+1. Features
+2. Technologies Used
+3. Installation
+4. Usage
+5. Database Configuration
+6. Contributing
+7. License
+
+## Features
+
+- 🔒 Secure user login and registration system using firebase.
+- Income and Expense Tracking: Record and categorize income and expenses for clear financial visibility.
+- Budgeting and Alerts: Set budgets for categories and receive alerts when limits are exceeded.
+- Graphs and Reports: Visualize financial data through graphs and generate detailed reports.
+- Savings and Goal Tracking: Set savings goals and track progress toward achieving them.
+
+
+## Technologies Used
+- Programming Language: HTML,CSS,JAVASCRIPT
+- Database: FIREBASE
+- Libraries:
+    + React-vite
+    + ant-design 
+# Installation
+
+## Prerequisites
+- React-vite latest version
+- Clone the repository
+```bash
+  https://github.com/tharun067/spendwise.git
+  cd spendwise
+```
+## packages required
+```bash
+   npm i @ant-design/charts
+   npm i react-toastify
+   npm i react-firebase-hooks/auth
+```
+    
+## Deployment
+
+To deploy this project run 
+
+```bash
+  npm run dev
+```
+## Screenshots
+![Screenshot](public/Screenshot 1.png)
+![Screenshot](public/Screenshot 2.png)
+![Screenshot](public/Screenshot 3.png)
+![Screenshot](public/Screenshot 4.png)
+
+
