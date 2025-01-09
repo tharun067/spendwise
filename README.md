@@ -56,9 +56,7 @@ To deploy this project run
   npm run dev
 ```
 ## Screenshots
-![Screenshot](public/Screenshot 1.png)
-![Screenshot](public/Screenshot 2.png)
-![Screenshot](public/Screenshot 3.png)
-![Screenshot](public/Screenshot 4.png)
-
-
+![alt text](<public/Screenshot 1.png>)
+![alt text](<public/Screenshot 2.png>)
+![alt text](<public/Screenshot 3.png>)
+![alt text](<public/Screenshot 4.png>)
