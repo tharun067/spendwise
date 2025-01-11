@@ -77,9 +77,9 @@ function AddExpense({
               className="select-input-2"
               onChange={handleSelectChange}
               value={selectedOption}>
-              <Select.Option value="salary">Food</Select.Option>
-              <Select.Option value="freelance">Education</Select.Option>
-              <Select.Option value="investment">Travel</Select.Option>
+              <Select.Option value="food">Food</Select.Option>
+              <Select.Option value="Education">Education</Select.Option>
+              <Select.Option value="Travel">Travel</Select.Option>
               <Select.Option value="other">other</Select.Option>
             </Select>) : (
             <Input
