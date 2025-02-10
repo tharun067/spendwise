@@ -1,4 +1,4 @@
-[DEPLOYMENT](https://spendwise-tharun-chavas-projects.vercel.app/)
+[(<public/link.png>)DEPLOYMENT](https://spendwise-tharun-chavas-projects.vercel.app/)
 
 # SpendWise
 SpendWise is React application used to check your daily
