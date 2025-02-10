@@ -3,13 +3,14 @@ import Header from '../components/Header'
 import Cards from '../components/Cards'
 import AddExpense from '../components/Modals/addExpense';
 import AddIncome from '../components/Modals/addIncome';
-import { addDoc, collection, getDocs, query } from '@firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from '@firebase/firestore';
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
 import TransactionTable from '../components/TransactionTable';
 import ChartComponents from '../components/Charts';
 import NoTransactions from '../components/NoTransactions';
+import { data } from 'react-router-dom';
 
 function Dashboard() {
   const [user] = useAuthState(auth);
@@ -111,10 +112,10 @@ function Dashboard() {
         
       const deletePromises = transactionsSnapshot.docs.map((transactionDoc) =>
         deleteDoc(doc(db, `users/${user.uid}/transactions`, transactionDoc.id))
-    );
-    toast.success("Transactions deleted");
-    setTotalBalance(0);
-    setExpense(0);
+      );
+      toast.success("Transactions deleted");
+      setTotalBalance(0);
+      setExpense(0);
       setIncome(0);
       setTransactions([]);
     } else {

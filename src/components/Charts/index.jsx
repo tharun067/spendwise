@@ -1,6 +1,4 @@
-//under development...
 import { Line, Pie } from '@ant-design/charts';
-import Grid from 'antd/es/card/Grid';
 import React from 'react'
 
 function ChartComponents({ sortedTransactions }) {
