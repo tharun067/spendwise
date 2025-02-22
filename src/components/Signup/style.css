@@ -17,4 +17,14 @@
     font-weight: 300;
     font-size: 0.8rem;
     cursor: pointer;
+    margin-bottom: 1rem;
 }
+.signin-Popups{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 1rem;
+  }

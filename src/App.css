@@ -7,15 +7,31 @@
 }
 .Charts-wrapper{
   height: auto;
-  padding: 2rem;
+  padding: 2rem ;
   border-radius: 0.5rem;
   box-shadow: var(--shadow);
-  display: flex;
-  justify-content: space-between;
-  margin: 2rem;
-  width: 90%;
+  display: block;
+  justify-content: center;
+  margin: 2rem 1rem;
+  width: 80%;
 }
 .chart-analysis{
   justify-content: center;
   margin: 3rem;
+}
+.chart-expenses{
+  padding: 0%;
+  margin-left: -2rem;
+}
+@media (min-width:700px){
+  .Charts-wrapper{
+    height: auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem;
+    width: 90%;
+  }
 }

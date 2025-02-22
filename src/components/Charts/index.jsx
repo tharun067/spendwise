@@ -38,19 +38,31 @@ function ChartComponents({ sortedTransactions }) {
   }, {});
   const config = {
     data: data,
-    width: 1200,
+    autoFit: true,
     xField: 'date',
     yField: 'amount',
+    point: {
+      size: 5,
+      shape:'circle',
+    },
+    label: {
+      visible: true,
+      style: {
+        textSize: 15,
+        textAlign: "left",
+      },
+      offset: 10,
+    },
   };
   const spendingConfig = {
     data: Object.values(finalSpending),
-    width: 500,
+    width: 400,
     angleField: "amount",
     colorField:"tag",
   };
   const receivingConfig = {
     data: Object.values(finalReceived),
-    width: 500,
+    width: 400,
     angleField: "amount",
     colorField:"tag",
   };
@@ -65,11 +77,11 @@ function ChartComponents({ sortedTransactions }) {
         </div>
       <div className='Charts-wrapper'>
         <div className='chart-expenses'>
-            <h2 style={{marginTop:0}}>Your Income</h2>
+            <h2 style={{marginTop:0,marginLeft:15 }}>Your Income</h2>
             <Pie {...receivingConfig} onReady={(chartInstance) => ( pieChart  =chartInstance )}/>
           </div>
           <div className='chart-expenses'>
-            <h2 style={{marginTop:0}}>Your Expenses</h2>
+            <h2 style={{marginTop:0,marginLeft:15 }}>Your Expenses</h2>
             <Pie {...spendingConfig} onReady={(chartInstance) => ( pieChart  =chartInstance )}/>
           </div>
       </div>

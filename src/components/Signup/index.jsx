@@ -1,12 +1,13 @@
 import { doc, getDoc, setDoc } from '@firebase/firestore';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword,signInWithPopup,GithubAuthProvider,FacebookAuthProvider } from "firebase/auth";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { auth, db, provider } from '../../firebase';
+import { auth, db, provider, providerFacebook,providerGithub } from '../../firebase';
 import Button from '../Button';
 import Input from '../Input';
 import "./style.css";
+import LoginButton from '../LoginButton';
 
 function SignupSignin() {
   const [name, setName] = useState("")
@@ -19,30 +20,36 @@ function SignupSignin() {
 
   function signupWithEmail() {
     setLoading(true);
+    const regex = new RegExp("/^(?=.*[A-Za-z])(?=.*\d).{8,}$/");
     //Authenticate the user or signup
     if (name != "" && email != "" && password != "" && confirmPassword != "") {
-      if (password == confirmPassword) {
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          toast.success("User Created!")
+      if (!regex.test(password)) {
+        if (password == confirmPassword) {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              toast.success("User Created!")
+              setLoading(false);
+              setName("");
+              setEmail("");
+              setPassword("");
+              setConfirmPassword("");
+              createUserDoc(user)
+              navigate("/dashboard");
+              //create a doc with user id as the following id
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              toast.error(errorMessage)
+              setLoading(false);
+            })
+        } else {
+          toast.error("password and confirm password don't match!");
           setLoading(false);
-          setName("");
-          setEmail("");
-          setPassword("");
-          setConfirmPassword("");
-          createUserDoc(user)
-          navigate("/dashboard");
-          //create a doc with user id as the following id
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          toast.error(errorMessage)
-          setLoading(false);
-        })
+        }
       } else {
-        toast.error("password and confirm password don't match!");
+        toast.error("Password Should Contain a uppercase,lowercase,symbols & digits")
         setLoading(false);
       }
     } else {
@@ -86,6 +93,38 @@ function SignupSignin() {
       setLoading(false);
       toast.error(error.message);
       console.error("Error signing in with Google: ", error.message);
+    }
+  }
+  async function signInWithFacebook() {
+    setLoading(true);
+    try {
+      const resultFacebook = await signInWithPopup(auth, providerFacebook);
+      const credential = FacebookAuthProvider.credentialFromResult(resultFacebook);
+      const accessToken = credential.accessToken;
+      const userFacebook = resultFacebook.userFacebook;
+      await createUserDoc(userFacebook);
+      toast.success("User Authenticated Successfully!");
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  }
+  async function signInWithGithub() {
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, providerGithub);
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      await createUserDoc(user);
+      toast.success("User Authenticated Successfully!");
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
     }
   }
   async function createUserDoc(user) {
@@ -137,13 +176,15 @@ function SignupSignin() {
           />
           <Button
             disabled={loading}
-            text={loading ? "loading.." : "Login using Email and Password"}
+            text={loading ? "loading.." : "Login"}
             onClick={loginWithEmail}
           />
           <p className='p-login'>or</p>
-          <Button
-            text={loading ? "loading.." : "Login using Google"} onClick={signInWithGoogle} blue={true}
-          />
+          <div className='signin-Popups'>
+              <LoginButton onClick={signInWithGoogle} icon ="/google.svg"/>
+              <LoginButton onClick={signInWithFacebook} icon='/facebook.svg' />
+              <LoginButton onClick={signInWithGithub} icon='/github.svg'/>
+            </div>
           <p className='p-login' onClick={() => setLoginForm(!loginForm)}>Don't have an account? Click here</p>
         </form>
       </div>)
@@ -179,13 +220,15 @@ function SignupSignin() {
             />
             <Button
               disabled={loading}
-              text={loading ? "loading.." : "Signup using Email and Password"}
+              text={loading ? "loading.." : "Signup"}
               onClick={signupWithEmail} />
             <p className='p-login'>or</p>
-            <Button
-              text={loading ? "loading.." : "Signup using Google"} onClick={signInWithGoogle} blue={true}
-            />
-            <p className='p-login' onClick={() => setLoginForm(!loginForm)}>Don't have an account? Click here</p>
+            <div className='signin-Popups'>
+              <LoginButton onClick={signInWithGoogle} icon ="/google.svg"/>
+              <LoginButton onClick={signInWithFacebook} icon='/facebook.svg' />
+              <LoginButton onClick={signInWithGithub} icon='/github.svg'/>
+            </div>
+            <p className='p-login' onClick={() => setLoginForm(!loginForm)}>Already have an account? Click here</p>
           </form>
         </div>)}
     </>

@@ -7,13 +7,13 @@ function AddExpense({
 }) {
   const [form] = Form.useForm();
   const [selectedOption, setSelectedOption] = useState("");
-    const [customValue, setCustomValue] = useState("");
-    const handleSelectChange = (value) => {
-      setSelectedOption(value);
-      if (value !== 'other') {
-        setCustomValue("")
-      }
-    };
+  const [customValue, setCustomValue] = useState("");
+  const handleSelectChange = (value) => {
+    setSelectedOption(value);
+    if (value !== 'other') {
+      setCustomValue("")
+    }
+  };
     const handleCustomInputChange = (e) => {
       setCustomValue(e.target.value);
     }

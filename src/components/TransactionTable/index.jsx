@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import "./style.css"
-import { Radio, Select, Table } from 'antd'
+import { Input, Modal, Radio, Select, Table } from 'antd'
 import searchImg from "../../assets/search.svg"
 import { parse, unparse } from 'papaparse';
 import { toast } from 'react-toastify';
 function TransactionTable({ transactions,addTransaction,fetchTransactions}) {
-    const [search, setSearch] = useState("");
-    const { Option } = Select;
-    const [typeFilter, setTypeFilter] = useState("");
-    const [sortKey, setSortKey] = useState("");
+  const [search, setSearch] = useState("");
+  const { Option } = Select;
+  const [typeFilter, setTypeFilter] = useState("");
+  const [sortKey, setSortKey] = useState("");
     const columns = [
         {
             title: "Name",
@@ -34,20 +34,20 @@ function TransactionTable({ transactions,addTransaction,fetchTransactions}) {
             title: "Type",
             dataIndex: "type",
             key: "type",
-        },
+      },
     ];
-    let filteredTransactions = transactions.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase()) && item.type.includes(typeFilter)
-    );
-    let sortedTransactions = filteredTransactions.sort((a, b) => {
-        if (sortKey === "date") {
-          return new Date(a.date) - new Date(b.date);
-        } else if (sortKey === "amount") {
-          return a.amount - b.amount;
-        } else {
-          return 0;
-        }
-    });
+  let filteredTransactions = transactions.filter((item) =>
+    (item.name?.toLowerCase() || "").includes(search.toLowerCase()) && (item.type || "").includes(typeFilter)
+  );
+  let sortedTransactions = filteredTransactions.sort((a, b) => {
+    if (sortKey === "date") {
+      return new Date(a.date) - new Date(b.date);
+    } else if (sortKey === "amount") {
+      return a.amount - b.amount;
+    } else {
+      return 0;
+    }
+  });
   function exportCSV() {
     var csv = unparse({
       fields: ["name", "type", "tag", "amount", "date"],
@@ -88,37 +88,37 @@ function TransactionTable({ transactions,addTransaction,fetchTransactions}) {
     }
   }
   return (
-      <div style={{
+    <div style={{
       width: "90%",
-        marginLeft:"2rem",
-      }}
+      marginLeft: "2rem",
+    }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "1rem",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
       >
-          <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: "1rem",
-                alignItems: "center",
-                marginBottom: "1rem",
-              }}
-          > 
-            <div className="input-flex">
-            <img src={searchImg} width="16" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder='search by name' />
-            </div>
-          <Select
-            className="select-input"
-            onChange={(value) => setTypeFilter(value)}
-            value={typeFilter}
-            placeholder="Filter"
-            allowClear
-            >
-            <Option value="">All</Option>
-            <Option value="income">Income</Option>
-            <Option value="expense">Expense</Option>
-              </Select>
-          </div>
-          <div className="my-table">
+        <div className="input-flex">
+          <img src={searchImg} width="16" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder='search by name' />
+        </div>
+        <Select
+          className="select-input"
+          onChange={(value) => setTypeFilter(value)}
+          value={typeFilter}
+          placeholder="Filter"
+          allowClear
+        >
+          <Option value="">All</Option>
+          <Option value="income">Income</Option>
+          <Option value="expense">Expense</Option>
+        </Select>
+      </div>
+      <div className="my-table">
         <div
           style={{
             display: "flex",
@@ -145,6 +145,7 @@ function TransactionTable({ transactions,addTransaction,fetchTransactions}) {
               justifyContent: "center",
               gap: "1rem",
               width: "400px",
+              marginLeft: "30px"
             }}
           >
             <button className="button" onClick={exportCSV}>
@@ -162,11 +163,11 @@ function TransactionTable({ transactions,addTransaction,fetchTransactions}) {
               style={{ display: "none" }}
             />
           </div>
-          </div>
-              <Table dataSource={sortedTransactions} columns={columns} />
-          </div>
+        </div>
+        <Table dataSource={sortedTransactions} columns={columns} />
       </div>
-  )
-}
+    </div>
+  );
+};
 
 export default TransactionTable

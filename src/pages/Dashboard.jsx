@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
-import Cards from '../components/Cards'
-import AddExpense from '../components/Modals/addExpense';
-import AddIncome from '../components/Modals/addIncome';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from '@firebase/firestore';
-import { auth, db } from '../firebase';
+import { addDoc, collection, deleteDoc, doc, getDocs, query } from '@firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
-import TransactionTable from '../components/TransactionTable';
+import Cards from '../components/Cards';
 import ChartComponents from '../components/Charts';
+import Header from '../components/Header';
+import AddExpense from '../components/Modals/addExpense';
+import AddIncome from '../components/Modals/addIncome';
 import NoTransactions from '../components/NoTransactions';
-import { data } from 'react-router-dom';
+import TransactionTable from '../components/TransactionTable';
+import { auth, db } from '../firebase';
 
 function Dashboard() {
   const [user] = useAuthState(auth);
@@ -134,26 +133,26 @@ function Dashboard() {
             income={income}
             expense={expense}
             totalBalance={totalBalance}
-          showExpenseModal={showExpenseModal}
+            showExpenseModal={showExpenseModal}
             showIncomeModal={showIncomeModal}
             reset={reset}
           />
-          {transactions && transactions.length != 0 ? <ChartComponents sortedTransactions={sortedTransactions} />:<NoTransactions/>}
-        <AddExpense
-          isExpenseModalVisible={isExpenseModalVisible}
-          handleExpenseCancel={handleExpenseCancel}
-          onFinish={onFinish}
-        />
-        <AddIncome
-          isIncomeModalVisible={isIncomeModalVisible}
-          handleIncomeCancel={handleIncomeCancel}
-          onFinish={onFinish}
+          {transactions && transactions.length != 0 ? <ChartComponents sortedTransactions={sortedTransactions} /> : <NoTransactions />}
+          <AddExpense
+            isExpenseModalVisible={isExpenseModalVisible}
+            handleExpenseCancel={handleExpenseCancel}
+            onFinish={onFinish}
           />
-          <TransactionTable transactions={transactions} addTransaction={addTransaction} fetchTransactions={fetchTransactions} />
+          <AddIncome
+            isIncomeModalVisible={isIncomeModalVisible}
+            handleIncomeCancel={handleIncomeCancel}
+            onFinish={onFinish}
+          />
+          <TransactionTable transactions={transactions} addTransaction={addTransaction} fetchTransactions={fetchTransactions}/>
         </>
       )}
     </div>
-  )
+  );
 }
 
 export default Dashboard

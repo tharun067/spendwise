@@ -18,12 +18,32 @@
 .logo-link{
     opacity: 0.8;
     cursor: pointer;
-    margin: 0;
-    color: white;
+    margin: 0.5rem 1rem;
+    color: blue;
+    border-radius: 2rem;
 }
 .logo-link:hover{
     opacity: 1;
     transition: all 0.3s;
     cursor: pointer;
 }
-
+.user-panel {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    background: rgba(46, 110, 96, 0.7);
+    border-radius: 8px;
+    box-shadow: var(--theme);
+    padding: 10px;
+    min-width: 200px;
+    z-index: 1000;
+    justify-content: center;
+}
+  
+.user-panel p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: white;
+    font-family: sans-serif;
+    margin: 0.8rem;
+}
