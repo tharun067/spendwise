@@ -1,43 +1,30 @@
 import { useState } from 'react';
-import { BsGoogle } from 'react-icons/bs';
-import { FiFacebook, FiGithub, FiLock, FiMail, FiUser } from 'react-icons/fi';
+import { FiFacebook, FiGithub, FiLock, FiMail } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import { useAuth } from '../hooks/useAuth';
-function Signup() {
-    const [name, setName] = useState('');
+import { BsGoogle } from 'react-icons/bs';
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { signup, signInWithGoogle, signInWithFacebook, signInWithGithub } = useAuth();
+    const { login, signInWithGoogle, signInWithFacebook, signInWithGithub } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
-        // Validation
-        if (!name || !email || !password || !confirmPassword) {
+        if (!email || !password) {
             setError('Please fill in all fields');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-
-        if (password.length < 6) {
-            setError('Password must be at 6 characters');
             return;
         }
 
         try {
             setLoading(true);
-            await signup(name, email, password);
+            await login(email, password);
             navigate('/');
         } catch (error) {
             setError(error.message);
@@ -46,7 +33,7 @@ function Signup() {
         }
     };
 
-    const handleGoogleSignup = async () => {
+    const handleGoogleLogin = async () => {
         try {
             setLoading(true);
             await signInWithGoogle();
@@ -58,7 +45,7 @@ function Signup() {
         }
     };
 
-    const handleFacebookSignup = async () => {
+    const handleFacebookLogin = async () => {
         try {
             setLoading(true);
             await signInWithFacebook();
@@ -70,7 +57,7 @@ function Signup() {
         }
     };
 
-    const handleGithubSignup = async () => {
+    const handleGithubLogin = async () => {
         try {
             setLoading(true);
             await signInWithGithub();
@@ -81,8 +68,6 @@ function Signup() {
             setLoading(false);
         }
     };
-
-
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -90,12 +75,12 @@ function Signup() {
                     <Logo />
                 </div>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-neutral-800">
-                    Create a new account
+                    Sign in to your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-neutral-600">
                     Or{' '}
-                    <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
-                        sign in to your account
+                    <Link to="/signup" className="font-medium text-primary-600 hover:text-primary-500">
+                        create a new account
                     </Link>
                 </p>
             </div>
@@ -109,28 +94,6 @@ function Signup() {
                     )}
           
                     <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
-                                Full name
-                            </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FiUser className="text-neutral-400" />
-                                </div>
-                                <input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    autoComplete="name"
-                                    required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="input-field pl-10"
-                                    placeholder="John Doe"
-                                />
-                            </div>
-                        </div>
-            
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
                                 Email address
@@ -165,32 +128,10 @@ function Signup() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    autoComplete="new-password"
+                                    autoComplete="current-password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="input-field pl-10"
-                                    placeholder="••••••••"
-                                />
-                            </div>
-                        </div>
-            
-                        <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700">
-                                Confirm password
-                            </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FiLock className="text-neutral-400" />
-                                </div>
-                                <input
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    required
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="input-field pl-10"
                                     placeholder="••••••••"
                                 />
@@ -203,7 +144,7 @@ function Signup() {
                                 disabled={loading}
                                 className="btn btn-primary w-full flex justify-center"
                             >
-                                {loading ? 'Creating account...' : 'Create account'}
+                                {loading ? 'Signing in...' : 'Sign in'}
                             </button>
                         </div>
                     </form>
@@ -220,7 +161,7 @@ function Signup() {
 
                         <div className="mt-6 grid grid-cols-3 gap-3">
                             <button
-                                onClick={handleGoogleSignup}
+                                onClick={handleGoogleLogin}
                                 disabled={loading}
                                 className="w-full inline-flex justify-center py-2 px-4 border border-neutral-300 rounded-md shadow-sm bg-white text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                             >
@@ -228,7 +169,7 @@ function Signup() {
                             </button>
 
                             <button
-                                onClick={handleFacebookSignup}
+                                onClick={handleFacebookLogin}
                                 disabled={loading}
                                 className="w-full inline-flex justify-center py-2 px-4 border border-neutral-300 rounded-md shadow-sm bg-white text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                             >
@@ -236,7 +177,7 @@ function Signup() {
                             </button>
 
                             <button
-                                onClick={handleGithubSignup}
+                                onClick={handleGithubLogin}
                                 disabled={loading}
                                 className="w-full inline-flex justify-center py-2 px-4 border border-neutral-300 rounded-md shadow-sm bg-white text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                             >
@@ -250,4 +191,4 @@ function Signup() {
     );
 }
 
-export default Signup
+export default Login

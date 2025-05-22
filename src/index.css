@@ -1,33 +1,150 @@
+@import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 :root {
-  --theme: #2970ff;
-  --shadow:0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+  /* Brand Colors */
+  --primary-50: #e6f0ff;
+  --primary-100: #cce0ff;
+  --primary-200: #99c2ff;
+  --primary-300: #66a3ff;
+  --primary-400: #3385ff;
+  --primary-500: #0077ff;
+  --primary-600: #0066db;
+  --primary-700: #0055b7;
+  --primary-800: #004493;
+  --primary-900: #00336f;
+
+  /* Accent Colors */
+  --accent-50: #e8f8ee;
+  --accent-100: #d1f1dd;
+  --accent-200: #a4e3bb;
+  --accent-300: #76d699;
+  --accent-400: #49c877;
+  --accent-500: #34c759;
+  --accent-600: #2dac4d;
+  --accent-700: #269141;
+  --accent-800: #1f7635;
+  --accent-900: #185c29;
+
+  /* Status Colors */
+  --success-500: #34c759;
+  --warning-500: #ff9500;
+  --error-500: #ff3b30;
+
+  /* Neutral Colors */
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+  
+  /* Font Sizes */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+
+  /* Spacing (8px system) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-40: 10rem;
+  --space-48: 12rem;
 }
-body {
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-800;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
 }
-input {
-  font-family: "Montserrat", sans-serif;
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-[#0077FF] text-white hover:bg-[#0077FF] focus:ring-[#0077FF];
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-300;
+  }
+
+  .btn-danger {
+    @apply bg-[#ff3b30] text-white hover:bg-red-600 focus:ring-red-500;
+  }
+
+  .btn-success {
+    @apply bg-[#34c759] text-white hover:bg-green-600 focus:ring-green-500;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077FF] focus:border-transparent transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-300;
+  }
+
+  .dashboard-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-300 hover:shadow-md;
+  }
 }
-.custom-input {
-  border: 0px;
-  border-bottom: 1px solid #000;
-  padding: 0.5rem 0rem;
-  width: 100%;
-  border-radius: 0;
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
 }
-.custom-input {
-  margin-top: -1rem !important;
+
+.slide-up {
+  animation: slideUp 0.3s ease-in-out;
 }
-.custom-input::placeholder {
-  color: rgba(0, 0, 0, 0.5);
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-.custom-input:focus {
-  outline: none;
-  opacity: 1;
-  transition: all 0.3s;
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

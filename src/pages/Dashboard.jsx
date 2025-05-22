@@ -1,156 +1,131 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, query } from '@firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { toast } from 'react-toastify';
-import Cards from '../components/Cards';
-import ChartComponents from '../components/Charts';
-import Header from '../components/Header';
-import AddExpense from '../components/Modals/addExpense';
-import AddIncome from '../components/Modals/addIncome';
-import NoTransactions from '../components/NoTransactions';
-import TransactionTable from '../components/TransactionTable';
-import { auth, db } from '../firebase';
+import React, { useEffect, useState } from 'react'
+import { FiPlusCircle, FiMinusCircle, FiRotateCw, FiDownload } from 'react-icons/fi';
+import { SlActionUndo } from "react-icons/sl";
+import DashboardHeader from '../components/DashboardHeader';
+import FinancialCharts from '../components/FinancialCharts';
+import FinancialSummary from '../components/FinancialSummary';
+import TransactionForm from '../components/TransactionForm';
+import TransactionList from '../components/TransactionList';
+import { useTransactions } from '../hooks/useTransactions';
 
 function Dashboard() {
-  const [user] = useAuthState(auth);
-  const [isExpenseModalVisible, setIsExpenseModalVisible] = useState(false);
-  const [isIncomeModalVisible, setIsIncomeModalVisible] = useState(false);
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [income, setIncome] = useState(0);
-  const [expense, setExpense] = useState(0);
-  const [totalBalance, setTotalBalance] = useState(0);
-  const showExpenseModal = () => {
-    setIsExpenseModalVisible(true);
-  };
+  const [formType, setFormType] = useState(null); // income or expense or null
+  const { transactions, loading, calculateSummary, resetAllTransactions, undoLastOperation, exportToCSV } = useTransactions();
 
-  const showIncomeModal = () => {
-    setIsIncomeModalVisible(true);
-  };
+  const [summary, setSummary] = useState({
+    totalBalance: 0,
+    totalIncome: 0,
+    totalExpenses: 0,
+    incomeCount: 0,
+    expenseCount: 0
+  });
 
-  const handleExpenseCancel = () => {
-    setIsExpenseModalVisible(false);
-  };
-
-  const handleIncomeCancel = () => {
-    setIsIncomeModalVisible(false);
-  };
-  const onFinish = (values, type) => {
-    const newTransaction = {
-      type: type,
-      date: (values.date).format("YYYY-MM-DD"),
-      amount: parseFloat(values.amount),
-      tag: values.tag,
-      name: values.name,
-    };
-    addTransaction(newTransaction);
-  };
-  async function addTransaction(transaction, many) {
-    try {
-      const docRef = await addDoc(
-        collection(db, `users/${user.uid}/transactions`),
-        transaction
-      );
-      console.log("Document written with ID: ", docRef.id);
-      if (!many) {
-        toast.success("Transaction Added!");
-      }
-      let newArr = transactions;
-      newArr.push(transaction);
-      setTransactions(newArr);
-      calculateBalance();
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      if (!many) {
-        toast.error("Couldn't add transaction");
-      }
-    }
-  }
+  // Update sidebar values whenever summary changes
   useEffect(() => {
-    calculateBalance();
-  },[transactions])
+    const sidebarBalance = document.getElementById('sidebar-balance');
+    const sidebarSavings = document.getElementById('sidebar-savings');
 
-  const calculateBalance = () => {
-    let incomeTotal = 0;
-    let expensesTotal = 0;
-
-    transactions.forEach((transaction) => {
-      if (transaction.type === "income") {
-        incomeTotal += transaction.amount;
-      } else {
-        expensesTotal += transaction.amount;
-      }
-    });
-
-    setIncome(incomeTotal);
-    setExpense(expensesTotal);
-    setTotalBalance(incomeTotal - expensesTotal);
-  };
-  async function fetchTransactions() {
-    setLoading(true);
-    if (user) {
-      const q = query(collection(db, `users/${user.uid}/transactions`));
-      const querySnapshot = await getDocs(q);
-      let transactionsArray = [];
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        transactionsArray.push(doc.data());
-      });
-      setTransactions(transactionsArray);
-      toast.success("Transactions Fetched!");
+    if (sidebarBalance) {
+      sidebarBalance.textContent = summary.totalBalance.toFixed(2);
     }
-    setLoading(false);
-  }
+
+    if (sidebarSavings) {
+      sidebarSavings.textContent = (summary.totalIncome - summary.totalExpenses).toFixed(2);
+    }
+  }, [summary]);
+
+  // Recalculate summary when transactions change
   useEffect(() => {
-    fetchTransactions();
-  }, [user]);
-  async function reset() {
-    if (user) {
-      const transactionsRef = collection(db, `users/${user.uid}/transactions`);
-      const transactionsSnapshot = await getDocs(transactionsRef);
-        
-      const deletePromises = transactionsSnapshot.docs.map((transactionDoc) =>
-        deleteDoc(doc(db, `users/${user.uid}/transactions`, transactionDoc.id))
-      );
-      toast.success("Transactions deleted");
-      setTotalBalance(0);
-      setExpense(0);
-      setIncome(0);
-      setTransactions([]);
-    } else {
-      toast.error("User Unavailable")
-    }
-  }
-  let sortedTransactions = transactions.sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
-  })
+    setSummary(calculateSummary());
+  }, [transactions, calculateSummary]);
+  
   return (
-    <div>
-      <Header />
-      {loading ? (<p>loading...</p>) : (
-        <>
-          <Cards
-            income={income}
-            expense={expense}
-            totalBalance={totalBalance}
-            showExpenseModal={showExpenseModal}
-            showIncomeModal={showIncomeModal}
-            reset={reset}
-          />
-          {transactions && transactions.length != 0 ? <ChartComponents sortedTransactions={sortedTransactions} /> : <NoTransactions />}
-          <AddExpense
-            isExpenseModalVisible={isExpenseModalVisible}
-            handleExpenseCancel={handleExpenseCancel}
-            onFinish={onFinish}
-          />
-          <AddIncome
-            isIncomeModalVisible={isIncomeModalVisible}
-            handleIncomeCancel={handleIncomeCancel}
-            onFinish={onFinish}
-          />
-          <TransactionTable transactions={transactions} addTransaction={addTransaction} fetchTransactions={fetchTransactions}/>
-        </>
+    <div className="py-6">
+      <DashboardHeader />
+      
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Financial Summary Cards */}
+        <FinancialSummary summary={summary} />
+        
+        {/* Quick Actions */}
+        <div className="lg:col-span-3 flex flex-wrap gap-3 justify-center sm:justify-start">
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-700 transition cursor-pointer"
+            onClick={() => setFormType('income')}
+          >
+            <FiPlusCircle className="mr-2" />
+            Add Income
+          </button>
+          
+          <button
+            className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-red-700 transition cursor-pointer"
+            onClick={() => setFormType('expense')}
+          >
+            <FiMinusCircle className="mr-2" />
+            Add Expense
+          </button>
+          
+          <button
+            className="btn btn-secondary inline-flex items-center cursor-pointer"
+            onClick={undoLastOperation}
+          >
+            <SlActionUndo className="mr-2" />
+            Undo
+          </button>
+          
+          <button
+            className="btn btn-secondary inline-flex items-center cursor-pointer"
+            onClick={() => {
+              if (window.confirm('Are you sure you want to reset all transactions? This action cannot be undone.')) {
+                resetAllTransactions();
+              }
+            }}
+          >
+            <FiRotateCw className="mr-2" />
+            Reset
+          </button>
+          
+          <button
+            className="btn btn-secondary inline-flex items-center cursor-pointer"
+            onClick={exportToCSV}
+            disabled={transactions.length === 0}
+          >
+            <FiDownload className="mr-2" />
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      {/* Transaction Form Modal */}
+      {formType && (
+        <div className="fixed inset-0 bg-neutral-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 slide-up">
+            <h2 className="text-xl font-semibold mb-4">
+              {formType === 'income' ? 'Add Income' : 'Add Expense'}
+            </h2>
+            <TransactionForm
+              type={formType}
+              onClose={() => setFormType(null)}
+            />
+          </div>
+        </div>
       )}
+
+      <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Charts */}
+        <div className="lg:col-span-3">
+          <h2 className="text-xl font-semibold mb-4">Financial Overview</h2>
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-neutral-200">
+            <FinancialCharts transactions={transactions} />
+          </div>
+        </div>
+        
+        {/* Transactions List */}
+        <div className="lg:col-span-3">
+          <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
+          <TransactionList transactions={transactions} loading={loading} />
+        </div>
+      </div>
     </div>
   );
 }
