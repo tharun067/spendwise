@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import {FiHome, FiPieChart, FiX, FiCreditCard, FiInfo} from 'react-icons/fi';
+import {FiHome, FiPieChart, FiX, FiCreditCard, FiInfo, FiCamera} from 'react-icons/fi';
 import Logo from './Logo';
 
 function Sidebar({ isOpen, toggleSidebar }) {
@@ -9,6 +9,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
     // Navigation Links
     const navLinks = [
         { name: 'Dashboard', path: '/', icon: <FiHome size={20} /> },
+        { name: 'Monthly Savings', path: '/monthly-savings', icon: <FiCamera size={20} /> },
         { name: 'How It works', path: '/how-it-works', icon: <FiInfo size={20} /> }
     ];
 
@@ -78,7 +79,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
                                     <span className="text-xs font-medium">Current Balance</span>
                                 </div>
                                 <p className="text-lg font-semibold text-primary-700">
-                                    <span className="text-xs">$</span> <span id="sidebar-balance">0.00</span>
+                                    <span className="text-xs">₹</span> <span id="sidebar-balance">0.00</span>
                                 </p>
                             </div>
               
@@ -88,7 +89,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
                                     <span className="text-xs font-medium">Monthly Savings</span>
                                 </div>
                                 <p className="text-lg font-semibold text-accent-700">
-                                    <span className="text-xs">$</span> <span id="sidebar-savings">0.00</span>
+                                    <span className="text-xs">₹</span> <span id="sidebar-savings">0.00</span>
                                 </p>
                             </div>
                         </div>

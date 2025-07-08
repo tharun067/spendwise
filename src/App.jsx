@@ -6,7 +6,8 @@ import Dashboard from './pages/Dashboard';
 import HowItWorks from './pages/HowItWorks';
 import NotFound from './pages/NotFound';
 import Layout from './components/Layout';
-
+import MonthlySavings from './pages/MonthlySavings';
+import MonthlyAutoSave from './components/MonthlyAutoSave';
 
 function App() {
   const { currentUser, loading } = useAuth();
@@ -18,7 +19,9 @@ function App() {
     return children;
   }
   return (
-    <Routes>
+    <>
+      <MonthlyAutoSave/>
+      <Routes>
       <Route path='/login' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
       <Route path='/how-it-works' element={<HowItWorks />} />
@@ -27,10 +30,12 @@ function App() {
           <Layout />
         </ProtectedRoute>
       }>
-        <Route index element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
+          <Route path='monthly-savings' element={<MonthlySavings/> } />
       </Route>
       <Route path='*' element={<NotFound/> } />
     </Routes>
+    </>
   )
 }
 

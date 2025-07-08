@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FiPlusCircle, FiMinusCircle, FiRotateCw, FiDownload } from 'react-icons/fi';
+import { FiPlusCircle, FiMinusCircle, FiRotateCw, FiDownload, FiCalendar } from 'react-icons/fi';
 import { SlActionUndo } from "react-icons/sl";
 import DashboardHeader from '../components/DashboardHeader';
 import FinancialCharts from '../components/FinancialCharts';
@@ -7,11 +7,12 @@ import FinancialSummary from '../components/FinancialSummary';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
 import { useTransactions } from '../hooks/useTransactions';
+import { useMonthlySavings } from "../hooks/useMonthlySavings";
 
 function Dashboard() {
   const [formType, setFormType] = useState(null); // income or expense or null
   const { transactions, loading, calculateSummary, resetAllTransactions, undoLastOperation, exportToCSV } = useTransactions();
-
+  const { saveCurrentMonth } = useMonthlySavings();
   const [summary, setSummary] = useState({
     totalBalance: 0,
     totalIncome: 0,
@@ -92,6 +93,14 @@ function Dashboard() {
           >
             <FiDownload className="mr-2" />
             Export CSV
+          </button>
+          <button
+            className='btn inline-flex items-center bg-[#34C759] text-white hover:bg-[#2dac4d] focus:ring-[#34C759]'
+            onClick={() => saveCurrentMonth(summary, transactions)}
+            disabled={transactions.length === 0}
+          >
+            <FiCalendar className='mr-2' />
+            Save Month
           </button>
         </div>
       </div>

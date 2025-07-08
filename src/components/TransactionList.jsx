@@ -187,7 +187,7 @@ function TransactionList({ transactions, loading }) {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         <span className={transaction.type === 'income' ? 'text-accent-600' : 'text-error-500'}>
-                                            {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                                            {transaction.type === 'income' ? '+ ' : '- '}₹{transaction.amount.toFixed(2)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">

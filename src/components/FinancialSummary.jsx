@@ -14,7 +14,7 @@ function FinancialSummary({ summary }) {
                     <div className="ml-4">
                         <h3 className="text-sm font-medium text-neutral-500">Current Balance</h3>
                         <p className="text-2xl font-semibold text-neutral-800">
-                            ${totalBalance.toFixed(2)}
+                            ₹{totalBalance.toFixed(2)}
                         </p>
                     </div>
                 </div>
@@ -28,7 +28,7 @@ function FinancialSummary({ summary }) {
                     <div className="ml-4">
                         <h3 className="text-sm font-medium text-neutral-500">Total Income</h3>
                         <p className="text-2xl font-semibold text-neutral-800">
-                            ${totalIncome.toFixed(2)}
+                            ₹{totalIncome.toFixed(2)}
                         </p>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ function FinancialSummary({ summary }) {
                     <div className="ml-4">
                         <h3 className="text-sm font-medium text-neutral-500">Total Expenses</h3>
                         <p className="text-2xl font-semibold text-neutral-800">
-                            ${totalExpenses.toFixed(2)}
+                            ₹{totalExpenses.toFixed(2)}
                         </p>
                     </div>
                 </div>
